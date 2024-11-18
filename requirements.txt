@@ -1,0 +1,17 @@
+psycopg2-binary
+newspaper3k
+networkx
+sqlalchemy
+httpx
+lxml_html_clean
+django
+html2text
+pypdf
+djangorestframework
+django-filter
+gunicorn
+celery[redis]
+django-celery-results
+redis
+git+https://github.com/Parsagon/parsagon-python.git@staging#egg=parsagon
+openai

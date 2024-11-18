@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galy Crop Maturity Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <style>
+        .metric-card {
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .score-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: white;
+            margin: 0 auto;
+        }
+        .maturity-indicator {
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .maturity-level {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .nascent { background-color: #ffd7d7; color: #721c24; }
+        .developing { background-color: #fff3cd; color: #856404; }
+        .ready { background-color: #d4edda; color: #155724; }
+        .score-label {
+            font-size: 0.9rem;
+            text-align: center;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#"><img src="/api/placeholder/30/30" alt="Galy Logo" class="me-2">Galy Crop Evaluation</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showPage('crops-list')">Crops List</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showPage('metrics-details')">Metrics Analysis</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Metrics Details Page -->
+    <div id="metrics-details" class="container mt-4">
+        <div class="row mb-4">
+            <div class="col">
+                <h2 id="selected-crop" class="mb-3">Cotton Analysis</h2>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-md-4">
+                                <div class="score-circle" style="background: linear-gradient(45deg, #4CAF50, #45a049)">4.2</div>
+                                <div class="score-label">Overall Score</div>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="maturity-indicator ready">
+                                    <div class="maturity-level">READY FOR USE</div>
+                                    <p class="mb-0">Score Range: 4.0 - 5.0</p>
+                                    <small>This crop shows strong potential across all evaluation metrics</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Metrics Radar Chart -->
+        <div class="row mb-4">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="mb-4">Metrics Overview</h4>
+                        <canvas id="mainMetricsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detailed Metrics -->
+        <div class="row">
+            <!-- Technology Metrics -->
+            <div class="col-md-6 mb-4">
+                <div class="card metric-card">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Technology (4.3/5.0)</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-4">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Research Papers</span>
+                                <strong>4.5/5.0</strong>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar bg-primary" role="progressbar" style="width: 90%"></div>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Citations</span>
+                                <strong>4.2/5.0</strong>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar bg-primary" role="progressbar" style="width: 84%"></div>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Research Years</span>
+                                <strong>4.4/5.0</strong>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar bg-primary" role="progressbar" style="width: 88%"></div>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Success Metric</span>
+                                <strong>4.1/5.0</strong>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar bg-primary" role="progressbar" style="width: 82%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Market Metrics -->
+            <div class="col-md-6 mb-4">
+                <div class="card metric-card">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0">Market (4.2/5.0)</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-4">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Research Papers</span>
+                                <strong>4.3/5.0</strong>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar bg-success" role="progressbar" style="width: 86%"></div>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Citations</span>
+                                <strong>4.0/5.0</strong>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar bg-success" role="progressbar" style="width: 80%"></div>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Research Years</span>
+                                <strong>4.2/5.0</strong>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar bg-success" role="progressbar" style="width: 84%"></div>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Success Metric</span>
+                                <strong>4.3/5.0</strong>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar bg-success" role="progressbar" style="width: 86%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ESG Metrics -->
+            <div class="col-md-6 mb-4">
+                <div class="card metric-card">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0">ESG (4.1/5.0)</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-4">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Research Papers</span>
+                                <strong>4.0/5.0</strong>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar bg-info" role="progressbar" style="width: 80%"></div>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Citations</span>
+                                <strong>4.2/5.0</strong>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar bg-info" role="progressbar" style="width: 84%"></div>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Research Years</span>
+                                <strong>4.1/5.0</strong>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar bg-info" role="progressbar" style="width: 82%"></div>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Success Metric</span>
+                                <strong>4.1/5.0</strong>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar bg-info" role="progressbar" style="width: 82%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Regulatory Metrics -->
+            <div class="col-md-6 mb-4">
+                <div class="card metric-card">
+                    <div class="card-header bg-warning text-white">
+                        <h5 class="mb-0">Regulatory (4.2/5.0)</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-4">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Research Papers</span>
+                                <strong>4.3/5.0</strong>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar bg-warning" role="progressbar" style="width: 86%"></div>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Citations</span>
+                                <strong>4.2/5.0</strong>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar bg-warning" role="progressbar" style="width: 84%"></div>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Research Years</span>
+                                <strong>4.0/5.0</strong>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar bg-warning" role="progressbar" style="width: 80%"></div>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Success Metric</span>
+                                <strong>4.3/5.0</strong>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar bg-warning" role="progressbar" style="width: 86%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Initialize Charts
+        function initializeCharts() {
+            const ctx = document.getElementById('mainMetricsChart').getContext('2d');
+            const data = {
+                labels: ['Technology', 'Market', 'ESG', 'Regulatory'],
+                datasets: [{
+                    label: 'Metrics Score',
+                    data: [4.3, 4.2, 4.1, 4.2],
+                    fill: true,
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgb(54, 162, 235)',
+                    pointBackgroundColor: 'rgb(54, 162, 235)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgb(54, 162, 235)'
+                }]
+            };
+
+            const config = {
+                type: 'radar',
+                data: data,
+                options: {
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 5,
+                            min: 0,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    }
+                }
+            };
+
+            new Chart(ctx, config);
+        }
+
+        // Define maturity levels
+        const maturityLevels = {
+            nascent: { range: [0, 2.5], class: 'nascent', text: 'NASCENT' },
+            developing: { range: [2.5, 4.0], class: 'developing', text: 'DEVELOPING' },
+            ready: { range: [4.0, 5.0], class: 'ready', text: 'READY FOR USE' }
+        };
+
+        // Function to determine maturity level
+        function getMaturityLevel(score) {
+            if (score >= maturityLevels.ready.range
